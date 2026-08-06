@@ -14,4 +14,4 @@
 
 해파리 도감의 5종 분류는 [국립수산과학원 해파리정보 API 명세](https://www.nifs.go.kr/openApi/actionOpenapiInfoList.do?contentsCd=06)의 `jellyList` 기준을 반영했습니다. 이 API는 `https://www.nifs.go.kr/OpenAPI_json?id=jellyList&key=발급키&sdate=yyyymmdd&edate=yyyymmdd` 형식이며, 발급키가 필요한 공식 API입니다. GitHub Pages에는 키를 넣지 않고 서버리스 프록시에서 관리하도록 구성했습니다.
 
-전국 해안 지도는 [네이버 지도 API v3](https://navermaps.github.io/maps.js.ncp/)를 사용할 수 있도록 구성했습니다. `window.JELLYWATCH_NAVER_CLIENT_ID`에 네이버 클라우드 플랫폼의 `ncpKeyId`를 설정하면 실제 전국 지도와 마커가 표시되며, 키가 없을 때는 12개 전국 해안 거점 대체 지도가 표시됩니다. 클라이언트 ID는 도메인 제한을 설정한 공개용 값만 사용하세요.
+전국 해안 지도는 [Google Maps JavaScript API](https://developers.google.com/maps/documentation/javascript)를 사용할 수 있도록 구성했습니다. `window.JELLYWATCH_GOOGLE_MAPS_API_KEY`에 HTTP 리퍼러 제한을 설정한 공개용 Google Maps API 키를 넣으면 실제 전국 지도와 마커가 표시되며, 키가 없을 때는 12개 전국 해안 거점 대체 지도가 표시됩니다. Google Cloud에서 Maps JavaScript API를 활성화하고 결제 계정을 설정해야 합니다. 키는 저장소에 직접 넣지 마세요.
