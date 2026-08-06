@@ -56,3 +56,20 @@ function submitReport(){ const place=qs('#reportPlace').value, level=qs('#report
 function addCommunityReport(report){ const list=qs('.report-list'); if(!list) return; const article=document.createElement('article'); article.className='report community-report'; article.dataset.place=report.place; article.innerHTML=`<div class="report-top"><span class="status ${esc(report.level)}">시민 제보</span><span class="mono">${esc(report.createdAt)}</span></div><h3>${esc(report.place)}</h3><p>${esc(report.note)}</p><div class="report-foot"><span>사용자 제보 · 검토 필요</span><button class="more share-report">공유하기 ↗</button></div>`; list.insertBefore(article,list.children[1]||null); article.querySelector('.share-report').addEventListener('click',()=>shareReport(report)); }
 async function shareReport(report){ const shareText=`JellyWatch 시민 제보\n${report.place}\n${report.note}\n${location.href}`; try{ if(navigator.share) await navigator.share({title:'JellyWatch 시민 제보',text:shareText,url:location.href}); else { await navigator.clipboard.writeText(shareText); alert('제보 내용이 클립보드에 복사되었습니다.'); } }catch(e){} }
 injectReportUI();
+
+// 국립수산과학원 해파리정보 API(jellyList) 기준 5종 분류
+const nifsSpecies = [
+  {name:'보름달물해파리', latin:'Aurelia aurita', group:'국내 최다 출현', risk:'낮은 위험도', tone:'purple', desc:'우리나라 연안에서 가장 흔하게 관찰되는 종으로, 봄부터 여름 사이 고밀도 출현이 보고됩니다.'},
+  {name:'노무라입깃해파리', latin:'Nemopilema nomurai', group:'대형 유입종', risk:'높은 위험도', tone:'orange', desc:'동중국해에서 해류를 따라 유입되는 대형 종으로, 해수욕장과 어장 피해를 유발할 수 있습니다.'},
+  {name:'작은부레관해파리', latin:'Physalia physalis', group:'독성 부유종', risk:'높은 위험도', tone:'yellow', desc:'푸른 부레와 긴 촉수가 특징인 종입니다. 해변에 떠밀려온 개체도 맨손으로 만지지 마세요.'},
+  {name:'유령해파리', latin:'Cyanea nozakii', group:'남해·동해남부', risk:'높은 위험도', tone:'blue', desc:'따뜻한 해역을 중심으로 출현하는 대형 종으로, 촉수 접촉 시 쏘임 사고를 일으킬 수 있습니다.'},
+  {name:'커튼원양해파리', latin:'Chrysaora pacifica', group:'연안 독성종', risk:'관찰 필요', tone:'teal', desc:'우리나라 연안 모니터링에서 확인되는 독성 해파리류로, 출현 지역에서는 거리를 두어야 합니다.'}
+];
+species.splice(0, species.length, ...nifsSpecies.map(s=>`${s.name} — ${s.desc}`));
+function renderNifsSpecies(){
+  const grid=qs('.species-grid'); if(!grid) return;
+  grid.innerHTML=nifsSpecies.map((s,i)=>`<article class="species-card nifs-card ${s.tone}"><div class="species-num">0${i+1} / 05</div><div class="nifs-medusa">◌</div><span class="nifs-group">${s.group}</span><h3>${s.name}</h3><p>${s.latin}</p><span class="risk-tag">${s.risk}</span></article>`).join('');
+  const section=qs('#species'); if(section&&!qs('#nifsSourceBar')){const bar=document.createElement('div');bar.id='nifsSourceBar';bar.className='nifs-source-bar';bar.innerHTML='<div><span class="api-dot"></span><strong id="nifsApiStatus">국립수산과학원 해파리정보 API 기준</strong><p id="nifsApiMessage">jellyList · 국내 연안 주간 모니터링 대상 5종 분류</p></div><a class="source-link" href="https://www.nifs.go.kr/openApi/actionOpenapiInfoList.do?contentsCd=06" target="_blank" rel="noopener">API 명세 보기 ↗</a>';section.appendChild(bar);}
+}
+function refreshNifsStatus(){const status=qs('#nifsApiStatus'),message=qs('#nifsApiMessage');if(!status)return;const hasKey=window.JELLYWATCH_NIFS_KEY||localStorage.getItem('jellywatchNifsKey');if(hasKey){status.textContent='국립수산과학원 API 연결 설정됨';message.textContent='jellyList 실시간 호출 준비 완료 · 키는 서버 프록시에서 관리하세요.';}else{status.textContent='국립수산과학원 API 기준 5종 분류';message.textContent='실시간 jellyList 호출은 발급받은 인증키와 서버 프록시 연결 후 활성화됩니다.';}}
+renderNifsSpecies(); refreshNifsStatus();
