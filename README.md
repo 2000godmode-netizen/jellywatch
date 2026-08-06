@@ -8,4 +8,6 @@
 
 ## 참고
 
-현재 화면의 관측 데이터는 UI 데모를 위한 예시 데이터입니다. 실제 서비스로 운영할 때는 국립수산과학원·해양수산부·지자체 해수욕장 안전 데이터 등 공식 출처의 최신 API와 연결하세요.
+현재 화면은 부산생활지도의 공식 ArcGIS REST 엔드포인트(`https://lifemap.busan.go.kr/arcgis/rest`)를 연결 기준으로 사용하고, 부산 연안 6개 해수욕장의 좌표·해안 구간을 구체적으로 표시합니다. 부산생활지도는 현재 시스템 점검 상태일 수 있으며, 해양 관측 실시간 값(수온·파고·풍속·해파리 출현)은 별도 공공데이터 API 키가 필요합니다. 키는 GitHub Pages 코드에 직접 넣지 말고 서버리스 프록시/환경변수로 연결하세요.
+
+공식 출처: [부산생활지도](https://lifemap.busan.go.kr/tp/index.do), [부산생활지도 ArcGIS REST](https://lifemap.busan.go.kr/arcgis/rest), [기상청 API허브 해양관측](https://apihub.kma.go.kr/).
