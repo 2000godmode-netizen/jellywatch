@@ -1,0 +1,11 @@
+const qs = (s) => document.querySelector(s);
+document.querySelectorAll('[data-scroll]').forEach((button) => button.addEventListener('click', () => qs(button.dataset.scroll)?.scrollIntoView({behavior:'smooth'})));
+const modal = qs('#modal');
+const openModal = () => modal.classList.add('open');
+const closeModal = () => modal.classList.remove('open');
+qs('#firstAidBtn').addEventListener('click', openModal); qs('#closeModal').addEventListener('click', closeModal); qs('#modalDone').addEventListener('click', closeModal); modal.addEventListener('click', (e) => { if(e.target === modal) closeModal(); });
+document.querySelectorAll('.map-pin').forEach((pin) => pin.addEventListener('click', () => { document.querySelectorAll('.report').forEach((r) => r.classList.toggle('active', r.dataset.place === pin.dataset.place)); const match = document.querySelector(`.report[data-place="${pin.dataset.place}"]`); match?.scrollIntoView({behavior:'smooth', block:'nearest'}); }));
+document.querySelectorAll('.report').forEach((report) => report.addEventListener('click', () => { document.querySelectorAll('.report').forEach((r) => r.classList.remove('active')); report.classList.add('active'); }));
+qs('#resetMap').addEventListener('click', () => { document.querySelectorAll('.report').forEach((r, i) => r.classList.toggle('active', i === 0)); qs('.map-card').scrollIntoView({behavior:'smooth',block:'center'}); });
+const species = ['보름달물해파리 — 둥근 모양의 투명한 갓이 특징인 우리 바다의 흔한 종입니다.','작은부레관해파리 — 푸른 부레 아래 긴 촉수를 가진 종으로 맨손 접촉을 피해야 합니다.','유령해파리 — 큰 갓과 긴 촉수를 가진 대형 해파리로, 거리를 두고 관찰하세요.'];
+qs('#randomSpecies').addEventListener('click', () => { const text = species[Math.floor(Math.random()*species.length)]; qs('#modalTitle').textContent='오늘의 해파리'; qs('.modal-panel>p:not(.eyebrow)').textContent=text; qs('.modal-callout').textContent='종과 출몰 정도는 바다 상태에 따라 달라질 수 있습니다. 해수욕 전 현장 안내를 확인하세요.'; openModal(); });

@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#081b33" />
+  <title>JellyWatch — 해파리 출몰 지도</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="site-shell">
+    <header class="topbar">
+      <a class="brand" href="#top" aria-label="JellyWatch 홈"><span class="brand-mark">◌</span><span>JELLY<span class="brand-accent">WATCH</span></span></a>
+      <nav><a href="#sightings">출몰 지도</a><a href="#guide">안전 가이드</a><a href="#species">종 알아보기</a></nav>
+      <button class="top-action" data-scroll="#sightings">내 주변 확인 <span>↗</span></button>
+    </header>
+
+    <main id="top">
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">COASTAL INTELLIGENCE · 2024 SUMMER EDITION</p>
+          <h1>바다를 더 잘<br><em>읽는</em> 방법</h1>
+          <p class="hero-intro">해파리 출몰 지역과 해파리에 대한 정보를 한눈에 확인하세요. 안전한 바다 생활을 위한 가장 빠른 안내서입니다.</p>
+          <div class="hero-actions"><button class="primary" data-scroll="#sightings">출몰 지도 보기 <span>↗</span></button><button class="text-button" data-scroll="#guide">안전 수칙 읽기 <span>↓</span></button></div>
+          <div class="hero-meta"><span class="live-dot"></span><span>마지막 업데이트 2024.08.12</span><span class="divider"></span><span>전국 12개 해안 관측소</span></div>
+        </div>
+        <div class="hero-art" aria-label="해파리 일러스트">
+          <div class="art-orbit orbit-one"></div><div class="art-orbit orbit-two"></div>
+          <div class="jellyfish jelly-hero"><div class="bell"><i></i><i></i><i></i></div><div class="tentacle t1"></div><div class="tentacle t2"></div><div class="tentacle t3"></div><div class="tentacle t4"></div></div>
+          <span class="art-note note-a">Aurelia aurita</span><span class="art-note note-b">BLUE HOUR / 17:42</span><span class="art-number">01</span>
+        </div>
+      </section>
+
+      <section id="sightings" class="section sightings-section">
+        <div class="section-heading"><div><p class="eyebrow">FIELD REPORT / 01</p><h2>오늘의 출몰 지도</h2></div><div class="legend"><span class="legend-item"><i class="dot high"></i>주의</span><span class="legend-item"><i class="dot low"></i>관찰</span><span class="legend-item"><i class="dot clear"></i>양호</span></div></div>
+        <div class="map-layout">
+          <div class="map-card">
+            <div class="map-top"><span>대한민국 연안</span><span class="mono">LIVE · 08.12</span></div>
+            <div class="map-canvas"><div class="grid-lines"></div><div class="korea-shape"><span class="shore s1"></span><span class="shore s2"></span><span class="shore s3"></span></div><button class="map-pin pin-1 high" data-place="부산 해운대" data-level="주의">1</button><button class="map-pin pin-2 high" data-place="제주 협재" data-level="주의">2</button><button class="map-pin pin-3 low" data-place="강릉 경포" data-level="관찰">3</button><button class="map-pin pin-4 low" data-place="인천 을왕리" data-level="관찰">4</button><div class="map-scale">128°E <span>130°E</span></div></div>
+            <div class="map-bottom"><span><i class="crosshair">⌖</i> 관측 범위 12km</span><button class="map-reset" id="resetMap">전체 보기</button></div>
+          </div>
+          <div class="report-list"><div class="list-heading"><span>관측 리포트</span><span class="mono">4 RESULTS</span></div><article class="report active" data-place="부산 해운대" data-level="주의"><div class="report-top"><span class="status high">주의</span><span class="mono">08.12 · 09:40</span></div><h3>부산 해운대 해수욕장</h3><p>보름달물해파리 다수 관측 · 수온 25.4°C</p><div class="report-foot"><span>관측소 B-04</span><button class="more">상세 보기 ↗</button></div></article><article class="report" data-place="제주 협재" data-level="주의"><div class="report-top"><span class="status high">주의</span><span class="mono">08.12 · 08:15</span></div><h3>제주 협재 해수욕장</h3><p>작은부레관해파리 출현 · 바람 남동 3m/s</p><div class="report-foot"><span>관측소 J-02</span><button class="more">상세 보기 ↗</button></div></article><article class="report" data-place="강릉 경포" data-level="관찰"><div class="report-top"><span class="status low">관찰</span><span class="mono">08.11 · 16:20</span></div><h3>강릉 경포 해변</h3><p>보름달물해파리 소량 · 해수욕 가능</p><div class="report-foot"><span>관측소 G-01</span><button class="more">상세 보기 ↗</button></div></article><article class="report" data-place="인천 을왕리" data-level="관찰"><div class="report-top"><span class="status low">관찰</span><span class="mono">08.11 · 11:05</span></div><h3>인천 을왕리 해수욕장</h3><p>해파리 미확인 · 주변 해역 정기 관찰 중</p><div class="report-foot"><span>관측소 I-03</span><button class="more">상세 보기 ↗</button></div></article></div>
+        </div>
+      </section>
+
+      <section id="guide" class="section guide-section"><div class="guide-copy"><p class="eyebrow">IF YOU GET STUNG / 02</p><h2>쏘였다면,<br><em>당황하지 마세요.</em></h2><p>대부분의 해파리 쏘임은 올바른 응급처치로 증상을 완화할 수 있습니다. 촉수를 맨손으로 만지지 않는 것이 가장 중요합니다.</p><button class="outline" id="firstAidBtn">응급처치 4단계 보기 <span>↗</span></button></div><div class="steps"><div class="step"><span>01</span><div><h3>물 밖으로 이동</h3><p>안전한 곳으로 나와 추가 접촉을 피하세요.</p></div></div><div class="step"><span>02</span><div><h3>바닷물로 세척</h3><p>수돗물 대신 바닷물로 부드럽게 씻어냅니다.</p></div></div><div class="step"><span>03</span><div><h3>촉수 제거</h3><p>장갑이나 카드로 남은 촉수를 조심히 제거하세요.</p></div></div><div class="step"><span>04</span><div><h3>증상이 심하면 119</h3><p>호흡 곤란, 어지럼증이 있으면 즉시 신고하세요.</p></div></div></div></section>
+
+      <section id="species" class="section species-section"><div class="section-heading"><div><p class="eyebrow">KNOW YOUR JELLYFISH / 03</p><h2>해파리 도감</h2></div><button class="text-button" id="randomSpecies">랜덤으로 알아보기 ↗</button></div><div class="species-grid"><article class="species-card purple"><div class="species-num">01 / 04</div><div class="mini-jelly purple-jelly"><div class="bell"></div><div class="mini-tentacles"></div></div><h3>보름달물해파리</h3><p>Aurelia aurita</p><span class="risk-tag">낮은 위험도</span></article><article class="species-card yellow"><div class="species-num">02 / 04</div><div class="mini-jelly yellow-jelly"><div class="bell"></div><div class="mini-tentacles"></div></div><h3>작은부레관해파리</h3><p>Physalia physalis</p><span class="risk-tag danger">높은 위험도</span></article><article class="species-card blue"><div class="species-num">03 / 04</div><div class="species-silhouette">✦</div><h3>유령해파리</h3><p>Cyanea capillata</p><span class="risk-tag">관찰 필요</span></article></div></section>
+    </main>
+    <footer><div class="brand"><span class="brand-mark">◌</span><span>JELLY<span class="brand-accent">WATCH</span></span></div><p>바다를 사랑하는 사람들이 만드는 해안 안전 정보</p><span class="mono">DATA IS A GUIDE, NOT A GUARANTEE.</span></footer>
+  </div>
+  <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="modal-panel"><button class="close" id="closeModal">×</button><p class="eyebrow">QUICK GUIDE</p><h2 id="modalTitle">해파리 쏘임 응급처치</h2><p>증상이 심하거나 호흡 곤란이 있다면 지체하지 말고 119에 연락하세요.</p><div class="modal-callout">해파리를 만지거나 문지르지 마세요. 죽은 해파리도 촉수가 남아 있을 수 있습니다.</div><button class="primary" id="modalDone">확인했습니다</button></div></div>
+  <script src="app.js"></script>
+</body>
+</html>
