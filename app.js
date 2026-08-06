@@ -34,10 +34,37 @@ function renderBusanDetailMap(){
 async function refreshOceanStatus(){ const status=qs('#apiStatus'), message=qs('#apiMessage'), dot=document.querySelector('.api-dot'); if(!status) return; status.textContent='공식 해양 API 확인 중'; message.textContent='부산생활지도 공식 엔드포인트를 확인하고 있습니다…'; dot.classList.remove('connected'); try { await fetch(officialOcean.endpoint,{mode:'no-cors',cache:'no-store'}); status.textContent='공식 지도 원문 확인됨'; message.textContent='부산생활지도 ArcGIS REST를 기준으로 표시 중 · 실시간 수온·파고는 인증키 연결 후 표시됩니다.'; dot.classList.add('connected'); } catch(error){ status.textContent='공식 해양 API 키 설정 필요'; message.textContent='공개 정적 페이지에서는 인증키를 노출할 수 없어 좌표 기반 부산 연안 지도를 표시합니다.'; } }
 renderBusanDetailMap(); refreshOceanStatus();
 
+// 전국 해안 관측 지도: 네이버 지도 API v3가 설정되면 실제 지도, 미설정 시 전국 해안 대체 화면을 표시합니다.
+const nationalReports = [
+  {place:'인천 을왕리', region:'서해·수도권', lat:37.4472, lng:126.3722, level:'관찰', risk:'low', species:'보름달물해파리', note:'연안 표층에서 소수 관찰'},
+  {place:'태안 만리포', region:'서해·충남', lat:36.7897, lng:126.1418, level:'관찰', risk:'low', species:'보름달물해파리', note:'수온 상승에 따른 출현 확인'},
+  {place:'군산 선유도', region:'서해·전북', lat:35.8134, lng:126.4157, level:'주의', risk:'high', species:'노무라입깃해파리', note:'대형 개체 2마리 신고'},
+  {place:'목포 평화광장', region:'남해·전남', lat:34.7898, lng:126.4281, level:'관찰', risk:'low', species:'보름달물해파리', note:'해수욕장 주변 관찰'},
+  {place:'여수 웅천', region:'남해·전남', lat:34.7484, lng:127.6743, level:'주의', risk:'high', species:'유령해파리', note:'촉수 긴 개체 출현 신고'},
+  {place:'통영 도남동', region:'남해·경남', lat:34.8225, lng:128.4203, level:'관찰', risk:'low', species:'보름달물해파리', note:'소규모 군집 관찰'},
+  {place:'부산 해운대', region:'동남해·부산', lat:35.1587, lng:129.1603, level:'주의', risk:'high', species:'노무라입깃해파리', note:'해수욕장 인근 고밀도 관찰'},
+  {place:'울산 일산', region:'동남해·울산', lat:35.4923, lng:129.4300, level:'관찰', risk:'low', species:'커튼원양해파리', note:'방파제 주변 관찰'},
+  {place:'포항 영일대', region:'동해·경북', lat:36.0560, lng:129.3785, level:'주의', risk:'high', species:'유령해파리', note:'수면 가까이 다수 관찰'},
+  {place:'울진 후포', region:'동해·경북', lat:36.6800, lng:129.4520, level:'관찰', risk:'low', species:'보름달물해파리', note:'소규모 출현'},
+  {place:'강릉 경포', region:'동해·강원', lat:37.8048, lng:128.9095, level:'관찰', risk:'low', species:'보름달물해파리', note:'해변 가장자리 관찰'},
+  {place:'제주 함덕', region:'제주', lat:33.5438, lng:126.6693, level:'주의', risk:'high', species:'작은부레관해파리', note:'부유 개체 접근 주의'}
+];
+const nationalPinPositions = [[18,12],[27,28],[20,48],[30,70],[48,77],[61,75],[74,66],[82,50],[85,35],[77,19],[62,9],[48,92]];
+const naverMapConfig = {clientId:window.JELLYWATCH_NAVER_CLIENT_ID || '',scriptUrl:'https://oapi.map.naver.com/openapi/v3/maps.js'};
+function nationalReportMarkup(){return `<div class="list-heading"><span>전국 해안 관측 제보</span><span class="mono">${nationalReports.length} COASTS</span></div>`+nationalReports.map((r,i)=>`<article class="report${i===6?' active':''}" data-place="${r.place}" data-level="${r.level}"><div class="report-top"><span class="status ${r.risk}">${r.level}</span><span class="mono">${r.lat.toFixed(2)}°N</span></div><h3>${r.place}</h3><p>${r.species} · ${r.note}</p><div class="report-foot"><span>${r.region}</span><button class="more">상세 보기 ↗</button></div></article>`).join('');}
+function renderNationalFallback(map){if(!map)return;map.className='map-canvas national-map national-fallback';map.innerHTML=`<div class="grid-lines"></div><div class="national-land"><span class="land-title">대한민국</span></div><div class="fallback-caption"><strong>전국 해안 관측 범위</strong><span>서해 · 남해 · 동해 · 제주</span></div>${nationalReports.map((r,i)=>`<button class="national-pin ${r.risk}" style="--x:${nationalPinPositions[i][0]}%;--y:${nationalPinPositions[i][1]}%" data-place="${r.place}" aria-label="${r.place} ${r.level}">${i+1}</button>`).join('')}<div class="map-scale">전국 해안 모니터링 <span>12개 거점</span></div>`;bindNationalInteractions();}
+function selectNationalReport(place){document.querySelectorAll('.report').forEach(r=>r.classList.toggle('active',r.dataset.place===place));document.querySelector(`.report[data-place="${place}"]`)?.scrollIntoView({behavior:'smooth',block:'nearest'});const item=nationalReports.find(r=>r.place===place);if(window.naverNationalMap&&item){window.naverNationalMap.setCenter(new naver.maps.LatLng(item.lat,item.lng));window.naverNationalMap.setZoom(10);}}
+function bindNationalInteractions(){document.querySelectorAll('.national-pin').forEach(pin=>pin.addEventListener('click',()=>selectNationalReport(pin.dataset.place)));document.querySelectorAll('.report').forEach(report=>report.addEventListener('click',()=>selectNationalReport(report.dataset.place)));}
+function renderNaverMap(){const map=qs('.map-canvas');if(!map||!window.naver?.maps)return;map.className='map-canvas national-map';map.innerHTML='<div id="naverMap" class="naver-map-host"></div>';window.naverNationalMap=new naver.maps.Map('naverMap',{center:new naver.maps.LatLng(36.35,127.85),zoom:7,minZoom:6,maxZoom:14,zoomControl:true,scaleControl:true,mapTypeControl:true});nationalReports.forEach((r,i)=>{const marker=new naver.maps.Marker({position:new naver.maps.LatLng(r.lat,r.lng),map:window.naverNationalMap,title:r.place,icon:{content:`<span class="naver-pin ${r.risk}">${i+1}</span>`,anchor:new naver.maps.Point(14,14)}});naver.maps.Event.addListener(marker,'click',()=>selectNationalReport(r.place));});}
+function updateNationalStatus(connected){const status=qs('#apiStatus'),message=qs('#apiMessage');if(!status)return;if(connected){status.textContent='네이버 지도 API 연결됨';message.textContent='전국 해안 12개 관측 거점 · 마커를 눌러 지역별 제보 확인';}else{status.textContent='네이버 지도 API 인증 확인 필요';message.textContent='클라이언트 ID가 없거나 인증에 실패해 전국 해안 대체 지도를 표시합니다.';}}
+function loadNaverMap(){const map=qs('.map-canvas');if(!naverMapConfig.clientId){renderNationalFallback(map);return;}const script=document.createElement('script');script.src=`${naverMapConfig.scriptUrl}?ncpKeyId=${encodeURIComponent(naverMapConfig.clientId)}`;script.async=true;script.onload=()=>{renderNaverMap();updateNationalStatus(true);};script.onerror=()=>{renderNationalFallback(map);updateNationalStatus(false);};document.head.appendChild(script);}
+function renderNationalMap(){const mapLayout=qs('.map-layout'),map=qs('.map-canvas'),list=qs('.report-list');if(!mapLayout||!map||!list)return;mapLayout.classList.add('national-layout');list.innerHTML=nationalReportMarkup();const bar=qs('.official-data-bar');if(bar){bar.querySelector('.source-link').href='https://navermaps.github.io/maps.js.ncp/';bar.querySelector('.source-link').textContent='네이버 지도 API 문서 ↗';}bindNationalInteractions();loadNaverMap();updateNationalStatus(false);}
+renderNationalMap();
+
 // 시민 제보: 카메라 촬영/사진 선택 → 위치·메모 입력 → 지도 리포트와 공유
 let reportPhoto = '';
 let reportStream = null;
-const reportPlaces = ['부산 해운대','부산 광안리','부산 송정','부산 다대포','부산 송도','부산 일광'];
+const reportPlaces = nationalReports.map(report => report.place);
 function esc(value){ return String(value).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[ch])); }
 function injectReportUI(){
   const target = qs('.map-top');
